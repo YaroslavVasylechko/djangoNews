@@ -1,10 +1,10 @@
 # djangoNews
 
-Simple site, made for yourself.
+Simple site, made for yourself.<br />
 
-Frontend: HTML, CSS, Bootstrap;
-Backend: Python/Django, REST api(maybe);
-DB: SQlite;
-ORM: django ORM;
+Frontend: HTML, CSS, Bootstrap;<br />
+Backend: Python/Django, REST api(maybe);<br />
+DB: SQlite;<br />
+ORM: django ORM;<br />
 
 All dependencies/requirements in requirements.txt
