@@ -3,16 +3,29 @@ from .models import News, Category
 from .forms import NewsForm
 from django.views.generic import ListView,  DetailView, CreateView
 from django.urls import reverse_lazy
+from .utils import MyMixin
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.core.paginator import Paginator
 
 
-class HomeNews(ListView):
+def test(request):
+    objects = ['john1', 'pau2l', 'gearge3', 'yarko4', 'john5', 'paul6', 'gearge7']
+    paginator = Paginator(objects, 2)
+    page_num = request.GET.get('page', 1)
+    page_objects = paginator.get_page(page_num)
+    return render(request, 'news/test.html', {'page_obj': page_objects})
+
+class HomeNews(MyMixin, ListView):
     model = News
     template_name = 'news/home_news_list.html'
     context_object_name = 'news'
+    mixin_prop = 'hello world'
+    paginate_by = 2
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
         context['title'] = 'Home - News from all over the world'
+        context['mixin_prop'] = self.get_prop()
         return context
 
     def get_queryset(self):
@@ -31,6 +44,7 @@ class NewsByCategory(ListView):
     template_name = 'news/home_news_list.html'
     context_object_name = 'news'
     allow_empty = False
+    paginate_by = 2
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -58,10 +72,11 @@ class ViewNews(DetailView):
 #     news_item = get_object_or_404(Nwews, pk=news_id)
 #     return render(request, 'news/view_news.html', {"news_item": news_item})
 
-class CreateNews(CreateView):
+class CreateNews(LoginRequiredMixin, CreateView):
     form_class = NewsForm
     template_name = 'news/add_news.html'
     # success_url = reverse_lazy('home')
+    login_url = '/admin/'
 
 # def add_news(request):
 #     if request.method == 'POST':
