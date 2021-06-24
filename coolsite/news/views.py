@@ -6,14 +6,25 @@ from django.urls import reverse_lazy
 from .utils import MyMixin
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.paginator import Paginator
+from django.contrib.auth.forms import UserCreationForm
+from django.contrib import messages
 
 
-def test(request):
-    objects = ['john1', 'pau2l', 'gearge3', 'yarko4', 'john5', 'paul6', 'gearge7']
-    paginator = Paginator(objects, 2)
-    page_num = request.GET.get('page', 1)
-    page_objects = paginator.get_page(page_num)
-    return render(request, 'news/test.html', {'page_obj': page_objects})
+def register(request):
+    if request.method == 'POST':
+        form =  UserCreationForm(request.POST)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'You are successfully registered!')
+            return redirect('login')
+        else:
+            messages.error(request, 'Registration error :(')
+    else:
+        form = UserCreationForm()
+    return render(request, 'news/register.html', {'form': form})
+
+def login(request):
+    return render(request, 'news/login.html')
 
 class HomeNews(MyMixin, ListView):
     model = News
