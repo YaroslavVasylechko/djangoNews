@@ -11,10 +11,17 @@
                 {% if request.user.is_authenticated %}
                 <li class="nav-item"><a class="nav-link" href="{% url 'add_news' %}">Add news</a></li>
                 {% endif %}
+            </ul>
         </div>
 
         <span class="navbar-text">
+
+            {% if request.user.is_authenticated %}
+            Have a good day, {{ user.username }} | <a href="{% url 'logout' %}">Log Out</a>
+            {% else %}
             <a href="{% url 'register' %}">Register</a> | <a href="{% url 'login' %}">Login</a>
+            {% endif %}
+
         </span>
 
     </div>
