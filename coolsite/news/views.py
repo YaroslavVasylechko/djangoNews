@@ -40,18 +40,18 @@ def user_login(request):
         form = UserLoginForm()
     return render(request, 'news/login.html', {'form': form})
 
-def test(request):
+def contact(request):
     if request.method == 'POST':
         form = ContactForm(request.POST)
         if form.is_valid():
             mail = send_mail(form.cleaned_data['subject'], form.cleaned_data['content'], 'yaro.edu@gmail.com', ['yaroslav.vasylechko@gmail.com'], fail_silently=True)
             if mail:
                 messages.success(request, 'Mail successfully delivered')
-                return redirect('test')
+                return redirect('contact')
             else:
                 messages.error(request, 'Sending error')
         else:
-            messages.error(request, 'Registration error :(')
+            messages.error(request, 'Validation error')
     else:
         form = ContactForm()
     return render(request, 'news/test.html', {"form": form})
